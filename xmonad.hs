@@ -2,6 +2,7 @@ import XMonad
 import XMonad.Config.Desktop
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
+import XMonad.Layout.NoBorders
 import XMonad.Util.Run(spawnPipe)
 import XMonad.Util.EZConfig(additionalKeys)
 import System.IO
@@ -47,6 +48,7 @@ main = do
 
     xmonad $ desktopConfig
         { manageHook = myManageHook <+> manageHook desktopConfig
+        , layoutHook = smartBorders $ layoutHook desktopConfig
         , workspaces = myWorkspaces
         , terminal = myTerminal
         , logHook = dynamicLogWithPP xmobarPP
