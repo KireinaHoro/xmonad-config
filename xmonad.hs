@@ -1,6 +1,7 @@
 import XMonad
 import XMonad.Config.Desktop
 import XMonad.Hooks.DynamicLog
+import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
 import XMonad.Layout.NoBorders
 import XMonad.Util.Run(spawnPipe)
@@ -22,22 +23,25 @@ myModMask = mod4Mask
 myWorkspaces = ["T", "W", "I", "M", "5", "6", "7", "8", "9", "0", "-", "="]
 
 myManageHook = composeAll . concat $
-     [ [ className =? "Firefox"          --> doShift "W" ]
-     , [ className =? "Termite"          --> doShift "T" ]
-     , [ className =? "TelegramDesktop"  --> doShift "I" ]
-     , [ className =? "Vlc"              --> doShift "M" ]
+     [ [ className =? "Firefox"              --> doShift "W" ]
+     , [ className =? "Termite"              --> doShift "T" ]
+     , [ className =? "TelegramDesktop"      --> doShift "I" ]
+     , [ className =? "Vlc"                  --> doShift "M" ]
+     , [ className =? "netease-cloud-music"  --> doShift "M" ]
      , [ fmap ( "Directory index of /Anime/" `isInfixOf` ) title --> doShift "M" ] -- doesn't work for now as Firefox changes the title *after* the window was created
      , [(className =? "Firefox" <&&> resource =? "Places") --> doFloat]
      , [(className =? "Firefox" <&&> resource =? "Browser") --> doFloat]
 
        -- using list comprehensions and partial matches
      , [ className =? c --> doFloat | c <- myFloatsC ]
+     , [ title     =? t --> doFloat | t <- myFloatsT ]
      , [ fmap ( c `isInfixOf` ) className   --> doFloat | c <- myMatchAnywhereFloatsC ]
      , [ fmap ( c `isInfixOf` ) title       --> doFloat | c <- myMatchAnywhereFloatsT ] 
 
      , [ manageDocks ]
      ]
     where myFloatsC = ["Pavucontrol", "feh", "Lxappearance", "Xscreensaver-demo"]
+          myFloatsT = ["Cloud Music"]
           myMatchAnywhereFloatsC = ["Google"]
           myMatchAnywhereFloatsT = ["Directory index of /Anime/"] -- same as above
 
@@ -46,7 +50,7 @@ myManageHook = composeAll . concat $
 main = do
     xmproc <- spawnPipe "xmobar"
 
-    xmonad $ desktopConfig
+    xmonad $ ewmh desktopConfig
         { manageHook = myManageHook <+> manageHook desktopConfig
         , layoutHook = smartBorders $ layoutHook desktopConfig
         , workspaces = myWorkspaces
