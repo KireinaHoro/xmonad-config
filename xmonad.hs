@@ -28,6 +28,7 @@ myManageHook = composeAll . concat $
      , [ className =? "TelegramDesktop"      --> doShift "I" ]
      , [ className =? "Vlc"                  --> doShift "M" ]
      , [ className =? "netease-cloud-music"  --> doShift "M" ]
+     , [ className =? "FeelUOwn"             --> doShift "M" ]
      , [ fmap ( "Directory index of /Anime/" `isInfixOf` ) title --> doShift "M" ] -- doesn't work for now as Firefox changes the title *after* the window was created
      , [(className =? "Firefox" <&&> resource =? "Places") --> doFloat]
      , [(className =? "Firefox" <&&> resource =? "Browser") --> doFloat]
